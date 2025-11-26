@@ -57,3 +57,48 @@ copilot-chat/
 *.conversation
 workspace.json
 .workspace/
+
+# Local configuration / secrets
+*.local.json
+*.development.json
+appsettings*.json
+*.env
+
+# Additional build artifacts (redundant safety)
+**/obj/**
+**/bin/**
+/SecretSanta2/Platforms/*/obj/
+/SecretSanta2/Platforms/*/bin/
+
+# Mobile / desktop packages
+*.apk
+*.aab
+*.ipa
+*.app
+*.msix
+*.msixbundle
+
+# Archives & backups
+*.zip
+*.7z
+*.rar
+*.tar
+*.gz
+
+# Crash dumps / diagnostics
+*.dmp
+*.stacktrace
+*.trace
+
+# Logs directory
+logs/
+Log/
+
+# Tooling / system files
+.editorconfig.local
+*.cache
+*.DS_Store
+Thumbs.db
+
+# Resource raw generated (if any)
+Resources/**/raw/**
