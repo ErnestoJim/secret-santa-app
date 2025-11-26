@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{D959B533-A622-44E1-8E03-7576A69238BF}|SecretSanta2\\SecretSanta2.csproj|c:\\users\\makru\\source\\repos\\secretsanta2\\secretsanta2\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}|",
+      "RelativeMoniker": "D:0:0:{D959B533-A622-44E1-8E03-7576A69238BF}|SecretSanta2\\SecretSanta2.csproj|solutionrelative:secretsanta2\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D959B533-A622-44E1-8E03-7576A69238BF}|SecretSanta2\\SecretSanta2.csproj|c:\\users\\makru\\source\\repos\\secretsanta2\\secretsanta2\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}|",
+      "RelativeMoniker": "D:0:0:{D959B533-A622-44E1-8E03-7576A69238BF}|SecretSanta2\\SecretSanta2.csproj|solutionrelative:secretsanta2\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D959B533-A622-44E1-8E03-7576A69238BF}|SecretSanta2\\SecretSanta2.csproj|c:\\users\\makru\\source\\repos\\secretsanta2\\secretsanta2\\passwordpromptpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D959B533-A622-44E1-8E03-7576A69238BF}|SecretSanta2\\SecretSanta2.csproj|solutionrelative:secretsanta2\\passwordpromptpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -48,10 +56,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{D959B533-A622-44E1-8E03-7576A69238BF}|SecretSanta2\\SecretSanta2.csproj|c:\\users\\makru\\source\\repos\\secretsanta2\\secretsanta2\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{D959B533-A622-44E1-8E03-7576A69238BF}|SecretSanta2\\SecretSanta2.csproj|solutionrelative:secretsanta2\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D959B533-A622-44E1-8E03-7576A69238BF}|SecretSanta2\\SecretSanta2.csproj|c:\\users\\makru\\source\\repos\\secretsanta2\\secretsanta2\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}|",
-      "RelativeMoniker": "D:0:0:{D959B533-A622-44E1-8E03-7576A69238BF}|SecretSanta2\\SecretSanta2.csproj|solutionrelative:secretsanta2\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -61,24 +65,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 0,
+              "Title": "README.md",
+              "DocumentMoniker": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\README.md",
+              "RelativeDocumentMoniker": "SecretSanta2\\README.md",
+              "ToolTip": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\README.md",
+              "RelativeToolTip": "SecretSanta2\\README.md",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAAAEcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2025-11-26T23:03:44.196Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": ".gitignore",
               "DocumentMoniker": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\.gitignore",
               "RelativeDocumentMoniker": "SecretSanta2\\.gitignore",
               "ToolTip": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\.gitignore",
               "RelativeToolTip": "SecretSanta2\\.gitignore",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADAAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAACMAAAAAAAAAAAD4vzoAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-11-26T22:21:35.5Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "DrawStorageService.cs",
               "DocumentMoniker": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\Services\\DrawStorageService.cs",
               "RelativeDocumentMoniker": "SecretSanta2\\Services\\DrawStorageService.cs",
@@ -90,7 +107,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "SecretSantaDraw.cs",
               "DocumentMoniker": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\Models\\SecretSantaDraw.cs",
               "RelativeDocumentMoniker": "SecretSanta2\\Models\\SecretSantaDraw.cs",
@@ -102,7 +119,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "SecretSantaService.cs",
               "DocumentMoniker": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\Services\\SecretSantaService.cs",
               "RelativeDocumentMoniker": "SecretSanta2\\Services\\SecretSantaService.cs",
@@ -114,7 +131,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Participant.cs",
               "DocumentMoniker": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\Models\\Participant.cs",
               "RelativeDocumentMoniker": "SecretSanta2\\Models\\Participant.cs",
@@ -126,7 +143,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "MainPage.xaml.cs",
               "DocumentMoniker": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\MainPage.xaml.cs",
               "RelativeDocumentMoniker": "SecretSanta2\\MainPage.xaml.cs",
@@ -138,7 +155,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "PasswordPromptPage.xaml.cs",
               "DocumentMoniker": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\PasswordPromptPage.xaml.cs",
               "RelativeDocumentMoniker": "SecretSanta2\\PasswordPromptPage.xaml.cs",
@@ -146,12 +163,11 @@
               "RelativeToolTip": "SecretSanta2\\PasswordPromptPage.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-22T14:21:27.965Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-22T14:21:27.965Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "IEmailSender.cs",
               "DocumentMoniker": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\Services\\IEmailSender.cs",
               "RelativeDocumentMoniker": "SecretSanta2\\Services\\IEmailSender.cs",
@@ -163,7 +179,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "SmtpEmailSender.cs",
               "DocumentMoniker": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\Services\\SmtpEmailSender.cs",
               "RelativeDocumentMoniker": "SecretSanta2\\Services\\SmtpEmailSender.cs",
@@ -175,7 +191,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "Microsoft.Maui.Controls.targets",
               "DocumentMoniker": "C:\\Users\\makru\\.nuget\\packages\\microsoft.maui.controls.build.tasks\\9.0.111\\buildTransitive\\netstandard2.0\\Microsoft.Maui.Controls.targets",
               "RelativeDocumentMoniker": "..\\..\\..\\.nuget\\packages\\microsoft.maui.controls.build.tasks\\9.0.111\\buildTransitive\\netstandard2.0\\Microsoft.Maui.Controls.targets",
@@ -187,7 +203,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "MainPage.xaml",
               "DocumentMoniker": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\MainPage.xaml",
               "RelativeDocumentMoniker": "SecretSanta2\\MainPage.xaml",
@@ -199,7 +215,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "AppShell.xaml",
               "DocumentMoniker": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\AppShell.xaml",
               "RelativeDocumentMoniker": "SecretSanta2\\AppShell.xaml",
@@ -211,7 +227,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "App.xaml",
               "DocumentMoniker": "C:\\Users\\makru\\source\\repos\\SecretSanta2\\SecretSanta2\\App.xaml",
               "RelativeDocumentMoniker": "SecretSanta2\\App.xaml",

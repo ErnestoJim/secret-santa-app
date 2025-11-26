@@ -47,3 +47,13 @@ draws.json
 
 # Maui generated cache
 **/Resources/**/build/**
+
+# Copilot / chat traces (prevent committing AI interaction artifacts)
+.copilot/
+copilot-chat/
+*.copilotlog
+*.copilot.txt
+*.chatlog
+*.conversation
+workspace.json
+.workspace/
