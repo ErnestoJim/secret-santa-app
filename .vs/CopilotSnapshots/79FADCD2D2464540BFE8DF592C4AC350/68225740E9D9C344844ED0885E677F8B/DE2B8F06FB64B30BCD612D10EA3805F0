@@ -1,0 +1,61 @@
+﻿using System.Threading.Tasks;
+
+namespace SecretSanta2
+{
+    public class PasswordPromptPage : ContentPage
+    {
+        private readonly Entry _passwordEntry;
+        private TaskCompletionSource<string?> _tcs = new();
+
+        public PasswordPromptPage()
+        {
+            Title = "Contraseña SMTP";
+            _passwordEntry = new Entry { IsPassword = true, Placeholder = "Contraseña" };
+            var accept = new Button { Text = "Aceptar" };
+            var cancel = new Button { Text = "Cancelar" };
+            accept.Clicked += OnAcceptClicked;
+            cancel.Clicked += OnCancelClicked;
+
+            Content = new VerticalStackLayout
+            {
+                Padding = 24,
+                Spacing = 16,
+                Children =
+                {
+                    new Label { Text = "Introduce la contraseña / App Password SMTP", FontAttributes = FontAttributes.Bold },
+                    _passwordEntry,
+                    new HorizontalStackLayout { Spacing = 12, Children = { accept, cancel } },
+                    new Label { Text = "Se guarda en SecureStorage local.", FontSize = 12, TextColor = Colors.Gray }
+                }
+            };
+        }
+
+        private void OnAcceptClicked(object? sender, EventArgs e)
+        {
+            var value = _passwordEntry.Text?.Trim();
+            _tcs.TrySetResult(string.IsNullOrEmpty(value) ? null : value);
+            Close();
+        }
+
+        private void OnCancelClicked(object? sender, EventArgs e)
+        {
+            _tcs.TrySetResult(null);
+            Close();
+        }
+
+        private void Close()
+        {
+            if (Navigation.ModalStack.Contains(this))
+            {
+                Navigation.PopModalAsync();
+            }
+        }
+
+        public static async Task<string?> PromptAsync(INavigation nav)
+        {
+            var page = new PasswordPromptPage();
+            await nav.PushModalAsync(page);
+            return await page._tcs.Task;
+        }
+    }
+}

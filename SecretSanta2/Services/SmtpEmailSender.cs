@@ -1,0 +1,42 @@
+using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
+
+namespace SecretSanta2.Services
+{
+    public class SmtpConfig
+    {
+        public string Host { get; set; } = string.Empty;
+        public int Port { get; set; }
+        public bool UseSsl { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty; // For Gmail use App Password (16 caracteres) no la contraseña normal
+        public string FromEmail { get; set; } = string.Empty;
+        public string FromName { get; set; } = string.Empty;
+    }
+
+    public class SmtpEmailSender : IEmailSender
+    {
+        private readonly SmtpConfig _config;
+        public SmtpEmailSender(SmtpConfig config) => _config = config;
+
+        public async Task SendAsync(string toEmail, string subject, string body)
+        {
+            using var client = new SmtpClient(_config.Host, _config.Port)
+            {
+                EnableSsl = _config.UseSsl,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(_config.Username, _config.Password)
+            };
+            var msg = new MailMessage
+            {
+                From = new MailAddress(_config.FromEmail, _config.FromName),
+                Subject = subject,
+                Body = body
+            };
+            msg.To.Add(toEmail);
+            await client.SendMailAsync(msg);
+        }
+    }
+}

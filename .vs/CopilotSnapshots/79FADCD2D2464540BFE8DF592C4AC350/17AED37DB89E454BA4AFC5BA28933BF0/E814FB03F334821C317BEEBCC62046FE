@@ -1,0 +1,289 @@
+﻿using System.Collections.ObjectModel;
+using SecretSanta2.Models;
+using SecretSanta2.Services;
+using Microsoft.Maui.Storage; // SecureStorage
+
+namespace SecretSanta2
+{
+    public partial class MainPage : ContentPage
+    {
+        private readonly ObservableCollection<Participant> _participants = new();
+        private readonly ObservableCollection<string> _restrictions = new(); // formato: "giverEmail -> receiverEmail"
+        private readonly ObservableCollection<AssignmentViewModel> _assignments = new();
+        private readonly DrawStorageService _storage = new();
+        private SecretSantaService _service = new();
+        private IEmailSender? _emailSender;
+        private SmtpConfig _smtpConfig;
+
+        public MainPage()
+        {
+            InitializeComponent();
+            ParticipantsCollection.ItemsSource = _participants;
+            RestrictionsCollection.ItemsSource = _restrictions;
+            AssignmentsCollection.ItemsSource = _assignments;
+
+            // Config sin password (se pedirá al enviar)
+            _smtpConfig = new SmtpConfig
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                UseSsl = true,
+                Username = "devsanclaus@gmail.com",
+                Password = string.Empty, // NO hardcode
+                FromEmail = "devsanclaus@gmail.com",
+                FromName = "Secret Santa"
+            };
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            await RefreshSavedDrawsAsync();
+        }
+
+        private async Task RefreshSavedDrawsAsync()
+        {
+            var names = await _storage.ListNamesAsync();
+            SavedDrawsPicker.ItemsSource = names;
+        }
+
+        private void RefreshPickers()
+        {
+            var names = _participants.Select(p => p.FullName).ToList();
+            GiverPicker.ItemsSource = names;
+            ReceiverPicker.ItemsSource = names;
+        }
+
+        private void OnAddParticipantClicked(object sender, EventArgs e)
+        {
+            var name = NameEntry.Text?.Trim();
+            var email = EmailEntry.Text?.Trim();
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(email))
+            {
+                StatusLabel.TextColor = Colors.Red;
+                StatusLabel.Text = "Nombre y correo obligatorios.";
+                return;
+            }
+            if (_participants.Any(p => p.Email.Equals(email, StringComparison.OrdinalIgnoreCase)))
+            {
+                StatusLabel.TextColor = Colors.Red;
+                StatusLabel.Text = "Ese correo ya está registrado.";
+                return;
+            }
+            _participants.Add(new Participant { FullName = name, Email = email });
+            NameEntry.Text = "";
+            EmailEntry.Text = "";
+            StatusLabel.TextColor = Colors.Green;
+            StatusLabel.Text = "Participante agregado.";
+            RefreshPickers();
+        }
+
+        private void OnRemoveParticipantClicked(object sender, EventArgs e)
+        {
+            if (sender is Button btn && btn.CommandParameter is string email)
+            {
+                var p = _participants.FirstOrDefault(x => x.Email == email);
+                if (p != null)
+                {
+                    _participants.Remove(p);
+                    var toRemove = _restrictions.Where(r => r.StartsWith(email + " ") || r.EndsWith(" " + email)).ToList();
+                    foreach (var r in toRemove) _restrictions.Remove(r);
+                    _assignments.Clear();
+                    RefreshPickers();
+                    StatusLabel.TextColor = Colors.Green;
+                    StatusLabel.Text = "Participante eliminado.";
+                }
+            }
+        }
+
+        private void OnAddRestrictionClicked(object sender, EventArgs e)
+        {
+            if (GiverPicker.SelectedItem is string giverName && ReceiverPicker.SelectedItem is string receiverName)
+            {
+                if (giverName == receiverName)
+                {
+                    StatusLabel.TextColor = Colors.Red;
+                    StatusLabel.Text = "No tiene sentidoRestricción duplicada.";
+                    return;
+                }
+                var giverEmail = _participants.First(p => p.FullName == giverName).Email;
+                var receiverEmail = _participants.First(p => p.FullName == receiverName).Email;
+                var key = $"{giverEmail} -> {receiverEmail}";
+                if (_restrictions.Contains(key))
+                {
+                    StatusLabel.TextColor = Colors.Red;
+                    StatusLabel.Text = "Restricción duplicada.";
+                    return;
+                }
+                _restrictions.Add(key);
+                StatusLabel.TextColor = Colors.Green;
+                StatusLabel.Text = "Restricción agregada.";
+            }
+        }
+
+        private void OnRemoveRestrictionClicked(object sender, EventArgs e)
+        {
+            if (sender is Button btn && btn.CommandParameter is string r)
+            {
+                _restrictions.Remove(r);
+                StatusLabel.TextColor = Colors.Green;
+                StatusLabel.Text = "Restricción eliminada.";
+            }
+        }
+
+        private void OnGenerateAssignmentsClicked(object sender, EventArgs e)
+        {
+            _assignments.Clear();
+            if (_participants.Count < 2)
+            {
+                StatusLabel.TextColor = Colors.Red;
+                StatusLabel.Text = "Se necesitan al menos 2 participantes.";
+                return;
+            }
+            var exclusionPairs = _restrictions
+                .Select(r =>
+                {
+                    var parts = r.Split("->", StringSplitOptions.TrimEntries);
+                    return (giver: parts[0], receiver: parts[1]);
+                }).ToList();
+            var result = _service.GenerateAssignments(_participants.ToList(), exclusionPairs);
+            if (result == null)
+            {
+                StatusLabel.TextColor = Colors.Red;
+                StatusLabel.Text = "No se pudo generar asignaciones con esas restricciones.";
+                return;
+            }
+            foreach (var kv in result)
+            {
+                _assignments.Add(new AssignmentViewModel { Giver = kv.Key.FullName, Receiver = kv.Value.FullName });
+            }
+            StatusLabel.TextColor = Colors.Green;
+            StatusLabel.Text = "Asignaciones listas (aún no enviadas).";
+        }
+
+        private async Task<bool> EnsureEmailSenderAsync()
+        {
+            if (_emailSender != null) return true;
+            string? stored = await SecureStorage.GetAsync("smtp_password");
+            if (string.IsNullOrEmpty(stored))
+            {
+                var pwd = await PasswordPromptPage.PromptAsync(Navigation);
+                if (string.IsNullOrEmpty(pwd))
+                {
+                    StatusLabel.TextColor = Colors.Red;
+                    StatusLabel.Text = "Envío cancelado (sin contraseña).";
+                    return false;
+                }
+                await SecureStorage.SetAsync("smtp_password", pwd);
+                stored = pwd;
+            }
+            _smtpConfig.Password = stored;
+            _emailSender = new SmtpEmailSender(_smtpConfig);
+            return true;
+        }
+
+        private async void OnResetPasswordClicked(object sender, EventArgs e)
+        {
+            SecureStorage.Remove("smtp_password");
+            _emailSender = null;
+            StatusLabel.TextColor = Colors.Green;
+            StatusLabel.Text = "Contraseña SMTP reiniciada.";
+            await Task.CompletedTask;
+        }
+
+        private async void OnSendEmailsClicked(object sender, EventArgs e)
+        {
+            if (_assignments.Count == 0)
+            {
+                StatusLabel.TextColor = Colors.Red;
+                StatusLabel.Text = "Primero genera las asignaciones.";
+                return;
+            }
+            if (!await EnsureEmailSenderAsync()) return;
+
+            var dict = _assignments.ToDictionary(a => _participants.First(p => p.FullName == a.Giver), a => _participants.First(p => p.FullName == a.Receiver));
+            try
+            {
+                foreach (var kv in dict)
+                {
+                    var body = $"Hola {kv.Key.FullName},\n\nTe ha tocado regalar a: {kv.Value.FullName}.\nRecuerda: límite máximo 40€.\n¡Felices fiestas!";
+                    await _emailSender!.SendAsync(kv.Key.Email, "Tu asignación Secret Santa", body);
+                }
+                StatusLabel.TextColor = Colors.Green;
+                StatusLabel.Text = "Correos enviados.";
+            }
+            catch (Exception ex)
+            {
+                StatusLabel.TextColor = Colors.Red;
+                StatusLabel.Text = "Error al enviar: " + ex.Message;
+            }
+        }
+
+        private async void OnSaveDrawClicked(object sender, EventArgs e)
+        {
+            var name = DrawNameEntry.Text?.Trim();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                StatusLabel.TextColor = Colors.Red;
+                StatusLabel.Text = "Pon un nombre al sorteo.";
+                return;
+            }
+            var draw = new SecretSantaDraw
+            {
+                Name = name,
+                Participants = _participants.ToList(),
+                Restrictions = _restrictions.ToList()
+            };
+            await _storage.SaveAsync(draw);
+            await RefreshSavedDrawsAsync();
+            StatusLabel.TextColor = Colors.Green;
+            StatusLabel.Text = "Sorteo guardado.";
+        }
+
+        private async void OnLoadDrawClicked(object sender, EventArgs e)
+        {
+            if (SavedDrawsPicker.SelectedItem is not string name)
+            {
+                StatusLabel.TextColor = Colors.Red;
+                StatusLabel.Text = "Selecciona un sorteo guardado.";
+                return;
+            }
+            var draw = await _storage.LoadByNameAsync(name);
+            if (draw == null)
+            {
+                StatusLabel.TextColor = Colors.Red;
+                StatusLabel.Text = "No se encontró el sorteo.";
+                return;
+            }
+            _participants.Clear();
+            foreach (var p in draw.Participants) _participants.Add(p);
+            _restrictions.Clear();
+            foreach (var r in draw.Restrictions) _restrictions.Add(r);
+            _assignments.Clear();
+            DrawNameEntry.Text = draw.Name;
+            RefreshPickers();
+            StatusLabel.TextColor = Colors.Green;
+            StatusLabel.Text = "Sorteo cargado.";
+        }
+
+        private async void OnDeleteDrawClicked(object sender, EventArgs e)
+        {
+            if (SavedDrawsPicker.SelectedItem is not string name)
+            {
+                StatusLabel.TextColor = Colors.Red;
+                StatusLabel.Text = "Selecciona un sorteo a eliminar.";
+                return;
+            }
+            await _storage.DeleteAsync(name);
+            await RefreshSavedDrawsAsync();
+            StatusLabel.TextColor = Colors.Green;
+            StatusLabel.Text = "Sorteo eliminado.";
+        }
+
+        private class AssignmentViewModel
+        {
+            public string Giver { get; set; } = string.Empty;
+            public string Receiver { get; set; } = string.Empty;
+        }
+    }
+}

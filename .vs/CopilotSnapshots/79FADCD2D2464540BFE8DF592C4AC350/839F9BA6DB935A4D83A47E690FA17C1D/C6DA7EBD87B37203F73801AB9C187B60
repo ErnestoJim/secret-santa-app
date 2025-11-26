@@ -1,0 +1,74 @@
+﻿using SecretSanta2.Models;
+
+namespace SecretSanta2.Services
+{
+    public class SecretSantaService
+    {
+        private readonly Random _rnd = new();
+
+        public Dictionary<Participant, Participant>? GenerateAssignments(
+            List<Participant> participants,
+            List<(string giver, string receiver)> exclusions)
+        {
+            // Use string keys instead of tuple to allow case-insensitive comparison
+            var exclusionSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var e in exclusions)
+            {
+                exclusionSet.Add(Key(e.giver, e.receiver));
+            }
+
+            bool IsExcluded(string giverEmail, string receiverEmail) =>
+                exclusionSet.Contains(Key(giverEmail, receiverEmail));
+
+            static string Key(string giver, string receiver) => $"{giver.Trim()}|{receiver.Trim()}";
+
+            // Fast random attempts
+            for (int attempt = 0; attempt < 200; attempt++)
+            {
+                var shuffled = participants.OrderBy(_ => _rnd.Next()).ToList();
+                bool ok = true;
+                var map = new Dictionary<Participant, Participant>();
+                for (int i = 0; i < participants.Count; i++)
+                {
+                    var giver = participants[i];
+                    var receiver = shuffled[i];
+                    if (giver.Email.Equals(receiver.Email, StringComparison.OrdinalIgnoreCase) ||
+                        IsExcluded(giver.Email, receiver.Email))
+                    {
+                        ok = false;
+                        break;
+                    }
+                    map[giver] = receiver;
+                }
+                if (ok) return map;
+            }
+
+            // Backtracking fallback
+            var receivers = participants.ToList();
+            var used = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var assignment = new Dictionary<Participant, Participant>();
+
+            bool Backtrack(int index)
+            {
+                if (index == participants.Count) return true;
+                var giver = participants[index];
+                foreach (var candidate in receivers.OrderBy(_ => _rnd.Next()))
+                {
+                    if (candidate.Email.Equals(giver.Email, StringComparison.OrdinalIgnoreCase)) continue;
+                    if (used.Contains(candidate.Email)) continue;
+                    if (IsExcluded(giver.Email, candidate.Email)) continue;
+
+                    assignment[giver] = candidate;
+                    used.Add(candidate.Email);
+                    if (Backtrack(index + 1)) return true;
+                    used.Remove(candidate.Email);
+                    assignment.Remove(giver);
+                }
+                return false;
+            }
+
+            if (Backtrack(0)) return assignment;
+            return null;
+        }
+    }
+}

@@ -1,0 +1,42 @@
+﻿using System.Threading.Tasks;
+
+namespace SecretSanta2
+{
+    public partial class PasswordPromptPage : ContentPage
+    {
+        private TaskCompletionSource<string?> _tcs = new();
+
+        public PasswordPromptPage()
+        {
+            InitializeComponent();
+        }
+
+        private void OnAcceptClicked(object sender, EventArgs e)
+        {
+            var value = PasswordEntry.Text?.Trim();
+            _tcs.TrySetResult(string.IsNullOrEmpty(value) ? null : value);
+            Close();
+        }
+
+        private void OnCancelClicked(object sender, EventArgs e)
+        {
+            _tcs.TrySetResult(null);
+            Close();
+        }
+
+        private void Close()
+        {
+            if (Navigation.ModalStack.Contains(this))
+            {
+                Navigation.PopModalAsync();
+            }
+        }
+
+        public static async Task<string?> PromptAsync(INavigation nav)
+        {
+            var page = new PasswordPromptPage();
+            await nav.PushModalAsync(page);
+            return await page._tcs.Task;
+        }
+    }
+}

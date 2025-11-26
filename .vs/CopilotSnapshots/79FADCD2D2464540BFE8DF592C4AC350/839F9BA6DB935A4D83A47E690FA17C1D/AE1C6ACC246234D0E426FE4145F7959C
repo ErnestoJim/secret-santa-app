@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SecretSanta2.MainPage"
+             Title="Secret Santa">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="18">
+            <Label Text="Registro de Participantes" FontAttributes="Bold" FontSize="20" />
+            <HorizontalStackLayout Spacing="8">
+                <Entry x:Name="NameEntry" Placeholder="Nombre completo" HorizontalOptions="FillAndExpand" />
+                <Entry x:Name="EmailEntry" Placeholder="Correo" Keyboard="Email" HorizontalOptions="FillAndExpand" />
+                <Button Text="Agregar" Clicked="OnAddParticipantClicked" />
+            </HorizontalStackLayout>
+
+            <Label Text="Participantes" FontAttributes="Bold" />
+            <CollectionView x:Name="ParticipantsCollection">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="6" ColumnDefinitions="*,*,Auto">
+                            <Label Text="{Binding FullName}" Grid.Column="0" LineBreakMode="TailTruncation" />
+                            <Label Text="{Binding Email}" Grid.Column="1" TextColor="Gray" FontSize="12" LineBreakMode="TailTruncation" />
+                            <Button Text="X" Grid.Column="2" Padding="4" Clicked="OnRemoveParticipantClicked"
+                                    CommandParameter="{Binding Email}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <BoxView HeightRequest="1" BackgroundColor="#CCCCCC" />
+
+            <Label Text="Restricciones (A no puede regalar a B)" FontAttributes="Bold" />
+            <HorizontalStackLayout Spacing="8">
+                <Picker x:Name="GiverPicker" Title="Quien da" WidthRequest="160" />
+                <Picker x:Name="ReceiverPicker" Title="A quien NO puede dar" WidthRequest="160" />
+                <Button Text="Agregar" Clicked="OnAddRestrictionClicked" />
+            </HorizontalStackLayout>
+
+            <CollectionView x:Name="RestrictionsCollection">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="4" ColumnDefinitions="*,Auto">
+                            <Label Text="{Binding}" />
+                            <Button Text="Quitar" Clicked="OnRemoveRestrictionClicked" CommandParameter="{Binding}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <BoxView HeightRequest="1" BackgroundColor="#CCCCCC" />
+
+            <Label Text="Acciones" FontAttributes="Bold" />
+            <HorizontalStackLayout Spacing="12">
+                <Button Text="Generar Asignaciones" Clicked="OnGenerateAssignmentsClicked" />
+                <Button Text="Enviar Correos" Clicked="OnSendEmailsClicked" />
+            </HorizontalStackLayout>
+
+            <Label x:Name="StatusLabel" TextColor="Green" />
+
+            <CollectionView x:Name="AssignmentsCollection">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="4" ColumnDefinitions="*,*">
+                            <Label Text="{Binding Giver}" />
+                            <Label Text="{Binding Receiver}" TextColor="Gray" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
