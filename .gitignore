@@ -55,3 +55,88 @@ draws.json
 
 # Rider
 .idea/
+
+# -------------------------
+# Secrets and credentials
+# -------------------------
+
+# Environment files
+.env
+.env.*
+.env.local
+
+# Local secrets / settings
+local.settings.json
+secrets.json
+*.secrets.json
+*.secret
+secrets/*.json
+credentials.json
+service-account.json
+serviceAccountKey.json
+
+# App settings (often used for development secrets)
+appsettings.*.json
+
+# Cloud / provider credentials
+.aws/
+.azure/
+.gcloud/
+google-services.json
+credentials/
+*.pem
+*.cer
+*.crt
+
+# Keyfiles and certs
+*.pfx
+*.p12
+*.jks
+
+# -------------------------
+# IDE and editor traces
+# -------------------------
+
+# Visual Studio Code
+.vscode/
+.vscode/*
+.vscode/**
+
+# JetBrains
+.idea/
+.idea/*
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+
+# Temporary editor files
+*.swp
+*~
+
+# -------------------------
+# GitHub Copilot / AI traces
+# -------------------------
+
+# Common Copilot local/cache folders or files (editor extensions may create these)
+.copilot
+.copilot/*
+.copilotrc
+.copilot.*
+copilot-logs/
+copilot-logs/*
+copilot-suggestions.json
+copilot-sessions.json
+*.copilot
+
+# Copilot-related GitHub workflow artifacts
+.github/copilot*
+.github/workflows/copilot*
+
+# Local suggestion/history files some extensions create
+code-suggestions/
+code-suggestions-*
+*.suggestions
+*.ai
