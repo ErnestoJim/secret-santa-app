@@ -1,0 +1,82 @@
+﻿# Secret Santa App (.NET MAUI)
+
+Aplicación multi-plataforma (.NET MAUI) para gestionar un sorteo de Amigo Secreto familiar.
+
+## Características
+- Registro de participantes (Nombre completo + Email).
+- Definición de restricciones (A no puede regalar a B).
+- Generación de asignaciones aleatorias respetando restricciones (no se muestran en pantalla para mantener el secreto).
+- Envío de correos con el resultado a cada participante (límite de 40€ y mensaje personalizado).
+- Gestión de múltiples sorteos: guardar, cargar y eliminar (participantes + restricciones) en almacenamiento local (JSON).
+- Solicitud segura de la contraseña SMTP mediante ventana modal y almacenamiento cifrado con SecureStorage.
+
+## Requisitos
+- .NET 9 SDK.
+- Visual Studio 2022 (MAUI workload) o `dotnet` CLI con workloads instalados.
+- Cuenta de correo con acceso SMTP (recomendado: Gmail con App Password / SendGrid / Outlook).
+
+## Configuración SMTP
+1. Gmail: activa 2FA y crea un App Password (16 caracteres) para "Mail".
+2. Cambia en `MainPage.xaml.cs` los campos Host/Port/Username/FromEmail si usas otro proveedor.
+3. La contraseña NO se guarda en código; se pedirá al primer envío y se almacenará en SecureStorage local.
+4. Para rotar la contraseña pulsa "Reset Password".
+
+## Uso
+1. Introduce el nombre del sorteo y pulsa "Guardar" si quieres conservar la plantilla.
+2. Agrega participantes con nombre y email.
+3. (Opcional) Agrega restricciones.
+4. Pulsa "Generar Asignaciones" (solo muestra estado, no revela los emparejamientos).
+5. Pulsa "Enviar Correos" y proporciona la contraseña SMTP cuando se te pida.
+6. Cada participante recibirá un correo con:
+   - Quién le tocó
+   - Límite 40€
+   - Fecha entrega (24 o 25 de diciembre según mensaje configurado)
+   - Mensaje navideño
+
+## Guardar / Cargar Sorteos
+- Guardar: introduce un nombre y pulsa "Guardar".
+- Cargar: selecciona en el Picker y pulsa "Cargar".
+- Eliminar: selecciona y pulsa "Eliminar".
+- Los datos se almacenan en un archivo `draws.json` dentro de AppDataDirectory (excluido del repo).
+
+## Seguridad
+- No hay credenciales embebidas en el repositorio.
+- `draws.json` ignorado para evitar subir correos reales.
+- SecureStorage cifra la contraseña SMTP.
+- Añadido `.gitignore` para excluir artefactos y trazas de herramientas.
+
+## Estructura Principal
+```
+Models/Participant.cs        # Modelo participante
+Models/SecretSantaDraw.cs    # Modelo sorteo
+Services/SecretSantaService.cs  # Lógica de asignación
+Services/DrawStorageService.cs  # Persistencia JSON
+Services/SmtpEmailSender.cs     # Envío SMTP
+MainPage.xaml / .cs            # Interfaz y lógica principal
+PasswordPromptPage.xaml.cs     # Modal contraseña SMTP
+```
+
+## Ejecutar
+```bash
+# Restaurar y compilar
+dotnet build
+
+# Ejecutar (ejemplo en Windows)
+dotnet run -f net9.0-windows10.0.19041.0
+```
+
+## Personalización
+- Cambia el texto del correo en `OnSendEmailsClicked` (MainPage.xaml.cs).
+- Ajusta límite de precio o fecha en el cuerpo del mensaje.
+- Para mostrar asignaciones solo durante desarrollo, cambia `IsVisible="False"` en `AssignmentsCollection` a `True`.
+
+## Futuras Mejoras Sugeridas
+- Exportar lista de participantes a CSV.
+- Integrar proveedores de correo con API (SendGrid / MailJet).
+- Añadir validación de formato de email y duplicados con expresiones regulares.
+- Modo "simulación" sin envío real para pruebas.
+
+## Licencia
+Puedes elegir MIT o una licencia que prefieras antes de publicar. Añade un archivo `LICENSE` si corresponde.
+
+¡Disfruta y felices fiestas! 🎄

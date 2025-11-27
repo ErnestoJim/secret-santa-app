@@ -1,0 +1,104 @@
+﻿# Build outputs
+bin/
+obj/
+
+# IDE
+.vs/
+*.user
+*.suo
+*.userprefs
+
+# Platform-specific
+**/Platforms/Android/bin/
+**/Platforms/Android/obj/
+**/Platforms/iOS/bin/
+**/Platforms/iOS/obj/
+**/Platforms/MacCatalyst/bin/
+**/Platforms/MacCatalyst/obj/
+**/Platforms/Windows/bin/
+**/Platforms/Windows/obj/
+
+# App data and caches
+*.db
+*.sqlite
+*.sqlite3
+*.log
+
+# Local persisted data
+# Secret Santa saved draws file (created at runtime in AppDataDirectory; ignore any local dev copy)
+draws.json
+
+# Certificates/keystores (do not commit)
+*.pfx
+*.snk
+*.keystore
+*.jks
+
+# Temporary
+*.tmp
+*.temp
+~$*
+
+# Rider/VSCode
+.idea/
+*.iml
+.gradle/
+.vscode/
+
+# Maui generated cache
+**/Resources/**/build/**
+
+# Copilot / chat traces (prevent committing AI interaction artifacts)
+.copilot/
+copilot-chat/
+*.copilotlog
+*.copilot.txt
+*.chatlog
+*.conversation
+workspace.json
+.workspace/
+
+# Local configuration / secrets
+*.local.json
+*.development.json
+appsettings*.json
+*.env
+
+# Additional build artifacts (redundant safety)
+**/obj/**
+**/bin/**
+/SecretSanta2/Platforms/*/obj/
+/SecretSanta2/Platforms/*/bin/
+
+# Mobile / desktop packages
+*.apk
+*.aab
+*.ipa
+*.app
+*.msix
+*.msixbundle
+
+# Archives & backups
+*.zip
+*.7z
+*.rar
+*.tar
+*.gz
+
+# Crash dumps / diagnostics
+*.dmp
+*.stacktrace
+*.trace
+
+# Logs directory
+logs/
+Log/
+
+# Tooling / system files
+.editorconfig.local
+*.cache
+*.DS_Store
+Thumbs.db
+
+# Resource raw generated (if any)
+Resources/**/raw/**

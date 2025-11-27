@@ -1,0 +1,71 @@
+# Secret Santa App (.NET MAUI)
+
+Aplicación multi-plataforma (.NET MAUI) para gestionar un sorteo de Amigo Secreto familiar.
+
+## Características
+- Registro de participantes (Nombre completo + Email).
+- Definición de restricciones (A no puede regalar a B).
+- Generación de asignaciones aleatorias respetando restricciones (no se muestran en pantalla para mantener el secreto).
+- Envío de correos con el resultado (límite de 40€ + fecha de entrega + mensaje navideño).
+- Gestión de múltiples sorteos: guardar, cargar y eliminar (participantes + restricciones) en almacenamiento local (JSON).
+- Solicitud segura de contraseña SMTP mediante modal + SecureStorage.
+
+## Requisitos
+- .NET 9 SDK
+- Workload .NET MAUI instalado
+- Cuenta SMTP (Gmail con App Password, Outlook, SendGrid, etc.)
+
+## Configuración SMTP
+1. Gmail: activa 2FA y crea un App Password para "Mail".
+2. Edita `MainPage.xaml.cs` si cambias Host/Port/Username/FromEmail.
+3. Contraseña se pide en runtime y se guarda cifrada (SecureStorage).
+4. Botón "Reset Password" elimina contraseña almacenada.
+
+## Uso
+1. Introduce nombre del sorteo y opcionalmente guarda.
+2. Agrega participantes y restricciones.
+3. Pulsa "Generar Asignaciones".
+4. Pulsa "Enviar Correos" y escribe la App Password SMTP.
+5. Cada participante recibe su asignación sin mostrarse en la app.
+
+## Persistencia
+- Sorteos guardados en `draws.json` (excluido del repo) en AppDataDirectory.
+- Incluye participantes y restricciones; no incluye asignaciones.
+
+## Seguridad
+- No hay credenciales en código fuente.
+- `.gitignore` excluye bin/ obj/ .vs/ draws.json y trazas de herramientas.
+- Contraseña SMTP cifrada con SecureStorage.
+
+## Estructura
+```
+Models/Participant.cs
+Models/SecretSantaDraw.cs
+Services/SecretSantaService.cs
+Services/DrawStorageService.cs
+Services/SmtpEmailSender.cs
+MainPage.xaml / MainPage.xaml.cs
+PasswordPromptPage.xaml.cs
+```
+
+## Ejecutar
+```bash
+dotnet build
+dotnet run -f net9.0-windows10.0.19041.0
+```
+
+## Personalización
+- Cambia el cuerpo y asunto del correo en `OnSendEmailsClicked`.
+- Ajusta límite o fecha de entrega.
+- Mostrar asignaciones (solo desarrollo): poner `IsVisible="True"` a `AssignmentsCollection`.
+
+## Futuras mejoras
+- Exportar a CSV.
+- Validación avanzada de email.
+- Integración con API de envío (SendGrid).
+- Modo prueba sin envío real.
+
+## Licencia
+Agregar archivo `LICENSE` (recomendado MIT) antes de publicar.
+
+Felices fiestas ??
