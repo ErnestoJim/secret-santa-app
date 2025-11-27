@@ -1,0 +1,57 @@
+## Visual Studio / .NET
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.csproj.user
+
+# Build folders
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+.packages/
+
+# VS Code / IDEs
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Secrets / certs
+*.pfx
+*.snk
+*.key
+*.publishsettings
+
+# MAUI / mobile outputs
+*.apk
+*.aab
+*.apks
+*.keystore
+*.ipa
+
+# Logs
+*.log
+
+# Generated and temporary
+Generated/
+*.tmp
+
+# Local app data / databases (do not track app runtime data)
+draws.json
+*.db
+*.sqlite
+*.sqlite3
+
+# Rider
+.idea/
